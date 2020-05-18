@@ -15,5 +15,5 @@ chrome.browserAction.onClicked.addListener(function(activeTab){
 
 // initialization of extension
 chrome.runtime.onInstalled.addListener(function(e){
-  console.log("Tab Manager Installation Finished.");
+  console.log("TabMan Installation Finished.");
 });

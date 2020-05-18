@@ -34,7 +34,7 @@ function tabHelper(){
   };
 
 
-  // tab manager shortcut handler utilities
+  // TabMan shortcut handler utilities
   // 1. reload tab
   // 2. mark as active tab
   // 3. pin/unpin tab
