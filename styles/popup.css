@@ -1,0 +1,57 @@
+body{
+  padding: 10px;
+}
+.logoHeader{
+    line-height: 64px;
+}
+.logo{
+  height: 64px;
+  width: 64px;
+}
+.logoText{
+  font-size: 32px;
+  margin-left: 20px;
+}
+
+.bg-grey{
+  background: #f8f9fa !important;
+}
+
+.bg-dark-grey{
+  background: #eeeeee !important;
+}
+
+.bg-purple{
+  background: #772953 !important;
+}
+
+.btn-purple, .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #ffffff !important;
+    background-color: #772953 !important;
+    border-color: #772953 !important;
+}
+
+.nav-pills .nav-link, .nav-pills>.nav-link {
+    color: #772953 !important;
+    background-color: #f8f9fa !important;
+    border: 1px solid #772953 !important;
+}
+
+.btn-purple:disabled {
+    color: #ffffff !important;
+    background-color: #BB94A9 !important;
+    border-color: #BB94A9 !important;
+}
+
+.btn-outline-purple {
+    color: #772953 !important;
+    border-color: #772953 !important;
+}
+
+.text-purple{
+  color: #772953 !important;
+}
+
+.text-cool-grey{
+  color: #333333 !important;
+}
