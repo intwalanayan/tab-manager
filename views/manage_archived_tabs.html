@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>TabMan</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link type="text/css" rel="stylesheet" href="/styles/popup.css">
+      <link type="text/css" rel="stylesheet" href="/styles/bootstrap.min.css">
+      <script src="/scripts/jquery.min.js"></script>
+      <script src="/scripts/bootstrap.bundle.min.js"></script>
+      <script src="/scripts/tab_helper.js"></script>
+      <script src="/scripts/folder_helper.js"></script>
+      <script src="/scripts/tab_manager.js"></script>
+      <script src="/scripts/view_helper.js"></script>
+  </head>
+  <body class="bg-grey">
+
+    <nav id="tabManagerActions" class="navbar navbar-expand-lg nav nav-pills border-bottom">
+
+      <a class="navbar-brand text-purple font-weight-bold" href="#"><img src="/icons/icon_48.png"> | TabMan</a>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarActions">
+        <ul class="navbar-nav">
+          <li class="nav-item mr-4">
+            <a class="nav-link" href="#manageOpenTabs" data-pageId="manageOpenTabs">Manage Open Tabs</a>
+          </li>
+          <li class="nav-item mr-4">
+            <a class="nav-link active" href="#manageArchivedTabs" data-pageId="manageArchivedTabs">Manage Archived Tabs</a>
+          </li>
+          <li class="nav-item mr-4">
+            <a class="nav-link" href="#settings" data-pageId="settings">Settings</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <div class="row">
+        <div class="order-0 column flex-fill col-2 border-right">
+          <div class="row h4 text-cool-grey mb-4">Existing Folders</div>
+          <div class="row mb-4">
+            <button class="btn btn-purple" id="createNewFolder" data-toggle="modal" data-target="#newFolderOverlayModal">+ New Folder</button>
+          </div>
+          <div id="folderList">
+            <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+            <span class="">Loading Folder</span>
+          </div>
+        </div>
+        <div class="order-1 column col-10">
+          <div class="folderHeader pb-1 pt-4 bg-dark-grey">
+            <div class="row m-0 mb-4 h4 justify-content-center text-cool-grey">
+              Listing Of Archived Tabs
+            </div>
+            <div class="row m-0 mb-4 justify-content-around">
+              <button type="button" class="btn btn-purple mr-4" id="deleteFolder">
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <span class="btnTitle">Delete Folder</span>
+              </button>
+              <button type="button" class="btn btn-purple mr-4" id="renameFolderViaModal" data-toggle="modal" data-target="#renameFolderOverlayModal">
+                Rename Folder
+              </button>
+              <button type="button" class="btn btn-purple mr-4" id="reopenFolder">
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <span class="btnTitle">Reopen All Tabs</span>
+              </button>
+              <button type="button" class="btn btn-purple mr-4" id="reopenRemoveFolder">
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <span class="btnTitle">Reopen &amp; Delete All</span>
+              </button>
+            </div>
+          </div>
+          <div id="tabList" class="container m-4 h-50 overflow-auto">
+            <div class="d-flex justify-content-center align-items-center  text-secondary">
+              <div class="mr-4 spinner-border" role="status" aria-hidden="true"></div>
+              <div class="loaderText">Loading Tab Details...</div>
+            </div>
+          </div>
+          <div id="tabActionList" class="row justify-content-end">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-purple ml-4" id="deleteTabs" disabled>
+              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+              <span class="btnTitle">Delete</span>
+            </button>
+            <button type="button" class="btn btn-purple ml-4" id="reopenTabs" disabled>
+              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+              <span class="btnTitle">Reopen</span>
+            </button>
+            <button type="button" class="btn btn-purple ml-4" id="reopenRemoveTabs" disabled>
+              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+              <span class="btnTitle">Reopen & Close</span>
+            </button>
+            <button type="button" class="btn btn-purple ml-4" disabled  data-toggle="modal" data-target="#moveTabsOverlayModal">
+              Move to
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="container d-none" id="loader">
+      <div class="d-flex justify-content-center align-items-center  text-secondary">
+        <div class="mr-4 spinner-border" role="status" aria-hidden="true"></div>
+        <div class="loaderText">Loading Tab Details...</div>
+      </div>
+    </div>
+
+    <!-- archive folder entry -->
+    <div class="row mb-1 d-none fe folderEntry">
+      <div class="btn btn-outline-purple">
+        <img src="/icons/folder.svg" class="mr-2 bg-grey"><span class="folderName"></span>
+      </div>
+    </div>
+
+    <!-- open tab entry -->
+    <div class="row align-items-baseline shadow mb-4 d-none te tabEntry">
+      <div class="col-1 text-center form-check">
+        <input class="form-check-input" type="checkbox">
+      </div>
+      <div class="col-11">
+        <div class="row"><span class="text-muted">Tab Title&nbsp:&nbsp</span><span class="tabTitle"></span></div>
+        <div class="row"><span class="text-muted">Tab Url&nbsp&nbsp&nbsp:&nbsp</span><span class="tabUrl"></span></div>
+      </div>
+    </div>
+
+    <!-- Archive to default folder -->
+    <div class="newFolderModal">
+      <div class="modal fade" id="newFolderOverlayModal" tabindex="-1" role="dialog" aria-labelledby="newFolderOverlayModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content" style="min-height: 320px;">
+            <div class="modal-header">
+              <h5 class="modal-title text-purple" id="archiveOverlayModalTitle">Create New Archive Folder</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="">
+                  <form>
+                    <div class="form-group">
+                      <label for="folderName">New Folder Name&nbsp;&nbsp;</label>
+                      <input type="text" class="form-control" id="folderName" placeholder="">
+                      <div class="invalid-feedback errorMessage" role="alert"></div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-purple" id="newFolderSubmit">
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <span class="btnTitle">Create Folder</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rename folder modal -->
+    <div class="renameFolderModal">
+      <div class="modal fade" id="renameFolderOverlayModal" tabindex="-1" role="dialog" aria-labelledby="newFolderOverlayModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content" style="min-height: 320px;">
+            <div class="modal-header">
+              <h5 class="modal-title text-purple" id="renameOverlayModalTitle">Rename Folder</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="">
+                  <form>
+                    <div class="bg-dark-grey border-bottom mb-4 p-2 shadow-sm text-center">
+                      <span class="mr-2">Current Folder Name :</span>
+                      <span id="curFolderName" class="text-purple"></span>
+                    </div>
+                    <div class="form-group">
+                      <label for="folderName">New Folder Name&nbsp;&nbsp;</label>
+                      <input type="text" class="form-control" id="destinationFolderName" placeholder="">
+                      <div class="invalid-feedback errorMessage" role="alert"></div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-purple" id="renameFolder">
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <span class="btnTitle">Rename Folder</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- folder radio template -->
+    <div class="form-check d-none cfr customFolderRadio">
+      <input class="form-check-input" type="radio" name="customFolderName" >
+      <label class="form-check-label" for="customFolderName"></label>
+    </div>
+
+    <!-- move selected tabs to selected folder -->
+    <div class="moveTabsModal">
+      <div class="modal fade" id="moveTabsOverlayModal" tabindex="-1" role="dialog" aria-labelledby="moveTabsOverlayModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content" style="min-height: 320px;">
+            <div class="modal-header">
+              <h5 class="modal-title text-purple" id="archiveOverlayModalTitle">Move Selected Tabs</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="">
+                  <div class="form-text mb-2">Please select folder to which tabs will be archived</div>
+                  <form id="customFolderForm" class="ml-4">
+                  </form>
+                  <div class="invalid-feedback errorMessage" role="alert">Please select any one folder</div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-purple" id="moveTabs" disabled>
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <span class="btnTitle">Move Tabs</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
