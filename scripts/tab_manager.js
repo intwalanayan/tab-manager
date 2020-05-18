@@ -48,12 +48,12 @@ function tabManager(){
       });
     };
     var loadPreferenceFromStorage = function(callback){
-      storage.get(preferences.STORAGE_KEY, function(result){
-        for(key in result[preferences.STORAGE_KEY]){
-          preferences.set(key, result[preferences.STORAGE_KEY][key]);
-          if(callback){
-            callback();
-          }
+      storage.get(storage_key, function(result){
+        for(key in result[storage_key]){
+          set(key, result[storage_key][key]);
+        }
+        if(callback){
+          callback();
         }
       });
     };
@@ -130,14 +130,12 @@ function tabManager(){
     pageId = $('#tabManagerActions .nav-link.active').attr("data-pageId") || OPENTAB_PAGE;
     var params = new URLSearchParams(window.location.search);
     var folderName = params.get("archiveFolderName") || "default";
-
-    var callback = function(){
-      hookEvents();
-      tab = new tabHelper();
-      folder = new folderHelper(folderName, storage, preferences, tab);
+    tab = (new tabHelper());
+    hookEvents();
+    preferences.load(function(){
+      window.tabman.folder = folder = (new folderHelper(folderName, storage, preferences, tab));
       initView(folderName);
-    };
-    preferences.load(callback);
+    });
   };
 
   init();

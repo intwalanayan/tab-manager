@@ -243,7 +243,7 @@ function folderHelper(folderName, storage, preferences, tab){
       if(window.tabman.pageId){
         if(currentFolderName == DEFAULT_FOLDER_NAME || currentFolderName == "default"){
           $('#deleteFolder').remove();
-          $('#renameFolderViaModal').remove();  
+          $('#renameFolderViaModal').remove();
         }
         self.populateFolderListInView();
       }
@@ -356,7 +356,7 @@ function folderHelper(folderName, storage, preferences, tab){
     // selective folder tabs level actions
     $(document).on('click', '#defaultArchiveSubmit', function(e){
       clickedElement = this;
-      self.addTabs(DEFAULT_FOLDER_NAME);
+      self.addTabs(DEFAULT_FOLDER_NAME, { closeTabOnAdd: true });
     });
 
     // enable archive to custom folder button on selecting custom folder
@@ -368,7 +368,7 @@ function folderHelper(folderName, storage, preferences, tab){
       clickedElement = this;
       var selectedFolderName = $('#customFolderForm .form-check-input:checked').val();
       if(selectedFolderName){
-        self.addTabs(selectedFolderName);
+        self.addTabs(selectedFolderName,{ closeTabOnAdd: true });
       }
     });
 
