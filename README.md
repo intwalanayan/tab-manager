@@ -1,4 +1,4 @@
-# tab-manager
+# tabman
 Browser Extension for managing tabs in bulk. 
 
 
