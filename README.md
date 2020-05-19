@@ -1,6 +1,8 @@
 # tabman
 Browser Extension for managing tabs in bulk. 
 
+[Chrome WebStore link](https://chrome.google.com/webstore/detail/tabman/dhfjhapabfcbnekdcdcbobepdafdbecd)
+
 
 # Shortcuts Supported
 1. Ctrl + Right Arrow : Go to tab on right
